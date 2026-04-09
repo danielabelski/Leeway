@@ -106,7 +106,7 @@ nodes:
             - glob
           skills:
             - code-review
-          max_turns: 3
+          max_turns: 5
 
         # Conditional — only if security risk detected
         security:
@@ -121,7 +121,7 @@ nodes:
           skills:
             - security-audit
           requires_approval: true
-          max_turns: 3
+          max_turns: 5
 
         # Conditional — only if docs are missing
         docs:
@@ -138,7 +138,7 @@ nodes:
               match: { event: after_tool_use, tool_name: grep }
               command: "echo '[hook] grep used in docs branch' >> /tmp/leeway_hooks.log"
               timeout: 5
-          max_turns: 3
+          max_turns: 5
 
       timeout: 120
 
