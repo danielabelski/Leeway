@@ -105,6 +105,11 @@ async def build_runtime(
     # Cron store
     cron_store = CronStore(data_dir / "cron_jobs.json")
 
+    # Memory store
+    from leeway.memory.store import MemoryStore
+
+    memory_store = MemoryStore()
+
     # Hooks
     hook_registry = HookRegistry()
     for hook_def in settings.hooks:
@@ -190,6 +195,7 @@ async def build_runtime(
         tool_metadata={
             "task_manager": task_manager,
             "cron_store": cron_store,
+            "memory_store": memory_store,
             "hook_executor": hook_executor,
             "hook_registry": hook_registry,
             "skill_registry": skill_registry,
