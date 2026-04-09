@@ -90,6 +90,11 @@ class ReactBackendHost:
                             await self._current_task
                         self._current_task = None
                         self._busy = False
+                        self._bundle.app_state.set(
+                            workflow_name="",
+                            workflow_node="",
+                            workflow_parallel_branches=[],
+                        )
                         await self._emit(
                             BackendEvent(
                                 type="transcript_item",
