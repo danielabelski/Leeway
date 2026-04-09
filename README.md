@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="assets/logo.png" alt="Leeway" width="200"><br>
-  <strong style="font-size:2em;">Leeway</strong>
+  <img src="assets/logo.png" alt="Leeway" width="400"><br>
+  <strong style="font-size:4em;">Leeway</strong>
 </p>
 
 <p align="center">
