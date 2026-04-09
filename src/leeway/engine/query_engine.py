@@ -67,6 +67,11 @@ class QueryEngine:
         """Update the active model for future turns."""
         self._model = model
 
+    @property
+    def model(self) -> str:
+        """Return the active model."""
+        return self._model
+
     def set_permission_checker(self, checker: PermissionChecker) -> None:
         """Update the active permission checker for future turns."""
         self._permission_checker = checker

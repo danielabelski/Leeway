@@ -230,7 +230,7 @@ def sync_app_state(bundle: RuntimeBundle) -> None:
     provider = detect_provider(settings)
     usage = bundle.engine.total_usage
     bundle.app_state.set(
-        model=settings.model,
+        model=bundle.engine.model,
         permission_mode=settings.permission.mode.value,
         theme=settings.theme,
         cwd=bundle.cwd,
