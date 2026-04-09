@@ -68,7 +68,7 @@ export function App({config}: {config: FrontendConfig}): React.JSX.Element {
 		if (!value.startsWith('/')) {
 			return [] as string[];
 		}
-		return session.commands.filter((cmd) => cmd.startsWith(value)).slice(0, 10);
+		return session.commands.filter((cmd) => cmd.startsWith(value));
 	}, [session.commands, input]);
 
 	const showPicker = commandHints.length > 0 && !session.busy && !session.modal && !selectModal;
