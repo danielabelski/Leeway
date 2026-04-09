@@ -291,7 +291,9 @@ def render_workflow_graph(wf: WorkflowDefinition) -> str:
         and any(groups.get(_ml, []) for _ml in range(layers.get(_s, 0) + 1, layers.get(_t, 0)))
     )
     bypass_extra = (_n_skip * 3 + _MAX_LABEL + 4) if _n_skip > 0 else 0
-    grid_w = content_w + back_space + bypass_extra + 6
+    title = f"Workflow: {wf.name}"
+    header_text_w = max(len(title), len(wf.description or "")) + 4
+    grid_w = max(content_w + back_space + bypass_extra + 6, header_text_w)
 
     # Header
     header_rows = 3 if wf.description else 2
@@ -333,8 +335,7 @@ def render_workflow_graph(wf: WorkflowDefinition) -> str:
 
     grid = _Grid(grid_w, grid_h)
 
-    # Header (truncate to grid width)
-    title = f"Workflow: {wf.name}"
+    # Header
     grid.puts(0, 2, title[:grid_w - 4])
     if wf.description:
         grid.puts(1, 2, wf.description[:grid_w - 4])
