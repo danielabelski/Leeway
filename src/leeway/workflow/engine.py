@@ -340,10 +340,10 @@ class WorkflowEngine:
         self._audit.final_output = carry_forward
         self._audit.mark_complete()
         path = " → ".join(self._audit.path_taken)
-        await self._emit_progress("")
         await self._emit_progress(
             f"✓ Workflow '{self.workflow.name}' complete. Path: {path}"
         )
+        await self._emit_progress("")
         return WorkflowResult(audit=self._audit, final_output=carry_forward)
 
     def _build_node_context(
