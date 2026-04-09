@@ -30,6 +30,16 @@ const PERMISSION_MODES: SelectOption[] = [
 	{value: 'plan', label: 'Plan Mode', description: 'Block all write operations'},
 ];
 
+const MODE_CYCLE: readonly string[] = ['default', 'full_auto', 'plan'];
+const DISPLAY_TO_RAW: Record<string, string> = {
+	'Default': 'default',
+	'Auto': 'full_auto',
+	'Plan Mode': 'plan',
+	'default': 'default',
+	'full_auto': 'full_auto',
+	'plan': 'plan',
+};
+
 type SelectModalState = {
 	title: string;
 	options: SelectOption[];
@@ -151,6 +161,16 @@ export function App({config}: {config: FrontendConfig}): React.JSX.Element {
 		if (key.ctrl && chunk === 'c') {
 			session.sendRequest({type: 'shutdown'});
 			exit();
+			return;
+		}
+
+		// Shift+Tab → cycle permission mode
+		if (key.shift && key.tab && !selectModal && !session.modal) {
+			const display = String(session.status.permission_mode ?? 'Default');
+			const raw = DISPLAY_TO_RAW[display] ?? 'default';
+			const idx = MODE_CYCLE.indexOf(raw);
+			const next = MODE_CYCLE[(idx + 1) % MODE_CYCLE.length];
+			session.sendRequest({type: 'submit_line', line: `/permissions set ${next}`});
 			return;
 		}
 
@@ -388,6 +408,7 @@ export function App({config}: {config: FrontendConfig}): React.JSX.Element {
 						<Text color="cyan">enter</Text> send{'  '}
 						<Text color="cyan">/</Text> commands{'  '}
 						<Text color="cyan">{'\u2191\u2193'}</Text> history{'  '}
+						<Text color="cyan">shift+tab</Text> mode{'  '}
 						<Text color="cyan">ctrl+c</Text> exit
 					</Text>
 				</Box>

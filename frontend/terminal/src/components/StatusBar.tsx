@@ -29,7 +29,7 @@ export function StatusBar({status, tasks}: {status: Record<string, unknown>; tas
 			<Box flexDirection="row">
 				<Text>
 					<Text color="cyan">{'\u25C6 '}</Text>
-					<Text bold>{model}</Text>
+					<Text dimColor>{model}</Text>
 					{hasTokens ? (
 						<>
 							<Text dimColor>{SEP}</Text>
@@ -47,7 +47,7 @@ export function StatusBar({status, tasks}: {status: Record<string, unknown>; tas
 						</>
 					) : null}
 					<Text dimColor>{SEP}</Text>
-					<Text dimColor>{mode}</Text>
+					<ModeIndicator mode={mode} />
 				</Text>
 			</Box>
 
@@ -71,6 +71,16 @@ export function StatusBar({status, tasks}: {status: Record<string, unknown>; tas
 			) : null}
 		</Box>
 	);
+}
+
+function ModeIndicator({mode}: {mode: string}): React.JSX.Element {
+	if (mode === 'Auto') {
+		return <Text color="green" bold>{'\u23F5\u23F5'} auto</Text>;
+	}
+	if (mode === 'Plan Mode') {
+		return <Text color="yellow" bold>{'\u23F8'} plan</Text>;
+	}
+	return <Text dimColor>{mode}</Text>;
 }
 
 function ContextBar({percentage}: {percentage: number}): React.JSX.Element {
