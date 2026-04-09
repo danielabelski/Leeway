@@ -46,9 +46,9 @@ Most AI agent tools fall into two extremes:
 
 <p align="center"><strong>YAML Decision Trees</strong></p>
 <p align="center">Signal-based transitions</p>
-<p align="center">Branching, merging, loops</p>
-<p align="center">Parallel node execution</p>
-<p align="center">Per-node tool/skill/hook scoping</p>
+<p align="center">Branch, merge, loop</p>
+<p align="center">Parallel execution</p>
+<p align="center">Per-node scoping</p>
 
 </td>
 <td width="20%" align="center" style="vertical-align: top; padding: 15px;">
@@ -56,8 +56,8 @@ Most AI agent tools fall into two extremes:
 <h3>Scheduling</h3>
 
 <p align="center"><strong>Cron Daemon</strong></p>
-<p align="center">Cron expressions & intervals</p>
-<p align="center">Background task manager</p>
+<p align="center">Cron & intervals</p>
+<p align="center">Background tasks</p>
 <p align="center">Webhook triggers</p>
 <p align="center">One-shot timers</p>
 
@@ -67,7 +67,7 @@ Most AI agent tools fall into two extremes:
 <h3>21+ Tools</h3>
 
 <p align="center"><strong>File, Shell, Web, MCP</strong></p>
-<p align="center">On-demand skill loading</p>
+<p align="center">On-demand skills</p>
 <p align="center">Plugin ecosystem</p>
 <p align="center">Persistent memory</p>
 <p align="center">Subagent spawning</p>
@@ -78,19 +78,19 @@ Most AI agent tools fall into two extremes:
 <h3>Extensibility</h3>
 
 <p align="center"><strong>Hooks & MCP</strong></p>
-<p align="center">Before/after tool hooks</p>
-<p align="center">MCP server integration</p>
+<p align="center">Before/after hooks</p>
+<p align="center">MCP integration</p>
 <p align="center">Plugin bundles</p>
-<p align="center">Custom tools via BaseTool</p>
+<p align="center">Custom tools</p>
 
 </td>
 <td width="20%" align="center" style="vertical-align: top; padding: 15px;">
 
 <h3>Governance</h3>
 
-<p align="center"><strong>Multi-level Permissions</strong></p>
+<p align="center"><strong>Permissions</strong></p>
 <p align="center">Path & command rules</p>
-<p align="center">Human-in-the-loop gates</p>
+<p align="center">Human-in-the-loop</p>
 <p align="center">Plan mode (read-only)</p>
 <p align="center">Multi-provider support</p>
 
