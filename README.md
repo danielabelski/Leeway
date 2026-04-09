@@ -1,5 +1,5 @@
 <p align="center" style="margin-bottom: 0;">
-  <img src="assets/logo.png" alt="Leeway" width="400">
+  <img src="assets/logo.png" alt="Leeway" width="360">
 </p>
 
 <h1 align="center" style="margin-top: 0;">Leeway</h1>
