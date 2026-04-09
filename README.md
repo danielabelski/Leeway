@@ -23,7 +23,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/agent_start.png" alt="Leeway CLI" width="600">
+  <img src="assets/agent_start.png" alt="Leeway CLI" width="1000">
 </p>
 
 ---
@@ -148,7 +148,7 @@ uv run leeway
 ```
 
 <p align="center">
-  <img src="assets/workflow_interactive.png" alt="Interactive workflow execution" width="600">
+  <img src="assets/workflow_interactive.png" alt="Interactive workflow execution" width="1000">
 </p>
 
 ---
@@ -289,7 +289,7 @@ See [`.leeway/workflows/code-health.yaml`](.leeway/workflows/code-health.yaml) â
 ```
 
 <p align="center">
-  <img src="assets/workflow_graph.png" alt="Code-health workflow graph" width="600">
+  <img src="assets/workflow_graph.png" alt="Code-health workflow graph" width="1000">
 </p>
 
 ### Workflow Properties
@@ -363,7 +363,7 @@ The `parallel` block itself also accepts a `timeout` (default `600` seconds) for
 ### Workflow Progress
 
 <p align="center">
-  <img src="assets/workflow_process.png" alt="Workflow execution progress" width="600">
+  <img src="assets/workflow_process.png" alt="Workflow execution progress" width="1000">
 </p>
 
 ---
