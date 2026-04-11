@@ -156,6 +156,8 @@ uv run leeway
 
 ## Architecture
 
+Leeway's core agent loop, tool registry, permission system, and hook lifecycle are inspired by **Claude Code's architecture** — a minimal, streaming-first loop where the model drives tool use and the host enforces safety around it. Leeway reimplements that design in Python and extends it with a YAML workflow layer, parallel branches, cron scheduling, and per-node scoping.
+
 ```mermaid
 flowchart LR
     U[User Prompt] --> C[CLI / React TUI]
