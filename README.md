@@ -31,80 +31,33 @@
 
 ## Why Leeway?
 
-Most AI agent tools fall into two extremes:
+**You want to automate the same multi-step task. A skill or system prompt can guide the agent, but it can't pin the order: every run reads different files, uses different tools, reaches different conclusions. Nothing you can repeat, nothing you can audit.**
 
-| | Agent-controlled (e.g. OpenClaw) | Human-designed (e.g. n8n) | **Leeway** |
+Leeway enforces the graph. You write a YAML decision tree; the same nodes run in the same order every time. Each node picks its own tools and runs a full agent loop: the LLM iterates and emits a `workflow_signal` when done. The graph transitions on those signals.
+
+### Tools comparison
+
+|  | Who drives the flow? | What's in a node? | Best for |
 |---|---|---|---|
-| **Who decides the flow?** | The AI | The human | **Human** (YAML decision trees) |
-| **Who executes steps?** | The AI | Rigid scripts | **AI** (flexible within each node) |
-| **Predictable?** | No — might do anything | Yes — but no AI flexibility | **Yes** — deterministic transitions |
-| **Flexible?** | Yes — but unpredictable | No — locked to the design | **Yes** — AI reasons within bounds |
+| **AutoGPT, OpenClaw** | LLM | Whatever the LLM decides | Exploratory tasks |
+| **n8n** | Graph | Any kind of node (API call, transform, AI Agent subflow) | SaaS integration (Slack, Stripe, Airtable) |
+| **Leeway** | Graph (decisions) | A full agent loop with local-dev tools | Local dev work (files, shell, codebase) |
 
-**Leeway** gives you the reliability of a state machine with the flexibility of an LLM at each step.
+**Pick Leeway when** the task runs on your own files or shell, needs to be repeatable, and needs a model that can reason inside each step.
 
 ---
 
 ## Key Features
 
-<table align="center" width="100%">
-<tr>
-<td width="20%" align="center" style="vertical-align: top; padding: 15px;">
+Five things that are hard to get from a node-graph workflow tool:
 
-<h3>Workflow Engine</h3>
-
-<p align="center"><strong>YAML Decision Trees</strong></p>
-<p align="center">Signal-based transitions</p>
-<p align="center">Branch, merge, loop</p>
-<p align="center">Parallel execution</p>
-<p align="center">Per-node scoping</p>
-
-</td>
-<td width="20%" align="center" style="vertical-align: top; padding: 15px;">
-
-<h3>Scheduling</h3>
-
-<p align="center"><strong>Cron Daemon</strong></p>
-<p align="center">Cron & intervals</p>
-<p align="center">Background tasks</p>
-<p align="center">Webhook triggers</p>
-<p align="center">One-shot timers</p>
-
-</td>
-<td width="20%" align="center" style="vertical-align: top; padding: 15px;">
-
-<h3>21+ Tools</h3>
-
-<p align="center"><strong>File, Shell, Web, MCP</strong></p>
-<p align="center">On-demand skills</p>
-<p align="center">Plugin ecosystem</p>
-<p align="center">Persistent memory</p>
-<p align="center">Subagent spawning</p>
-
-</td>
-<td width="20%" align="center" style="vertical-align: top; padding: 15px;">
-
-<h3>Extensibility</h3>
-
-<p align="center"><strong>Hooks & MCP</strong></p>
-<p align="center">Before/after hooks</p>
-<p align="center">MCP integration</p>
-<p align="center">Plugin bundles</p>
-<p align="center">Custom tools</p>
-
-</td>
-<td width="20%" align="center" style="vertical-align: top; padding: 15px;">
-
-<h3>Governance</h3>
-
-<p align="center"><strong>Permissions</strong></p>
-<p align="center">Path & command rules</p>
-<p align="center">Human-in-the-loop</p>
-<p align="center">Plan mode (read-only)</p>
-<p align="center">Multi-provider support</p>
-
-</td>
-</tr>
-</table>
+| # | Feature | What it does |
+|---|---------|--------------|
+| 1 | **Agent loop per node** | Each node is a full agent loop. The model can call `read_file`, `grep`, `bash`, iterate up to `max_turns`, and emit a `workflow_signal` when done. You decide the graph; the model decides the steps within each node. |
+| 2 | **Per-node scoping** | Every node gets its own `ToolRegistry`, `SkillRegistry`, `HookRegistry`, and MCP set, merged from globals and the node's allowlist. Node A can have `bash` + `glob`; node B can have `web_fetch` + `mcp_github_search`; same workflow. |
+| 3 | **Progressive skill loading, per node** | `skill(name="code-review")` returns `SKILL.md` plus a file index. Reference files load only when the LLM explicitly asks. Combined with per-node scoping, each node only sees its allowlisted skills, and only their top-level content until the model drills in. |
+| 4 | **Turn budget with urgency injection** | For signal-based nodes, the engine tells the LLM how many turns it has and injects an *urgent reminder* at 2 turns remaining, listing the exact signals to call. No silent cost runaway. |
+| 5 | **Auto-compaction (microcompact + LLM summary)** | When context fills, Leeway first clears stale tool-result bodies in place. If that's not enough, it summarizes older messages via LLM while preserving the last 6. Fully transparent: no manual `/compact`, no lost context mid-workflow. |
 
 ---
 
@@ -143,7 +96,7 @@ uv run leeway --api-format openai --base-url https://api.openai.com/v1
 ### Try the Example Workflow
 
 ```bash
-# Health check on any codebase — no input needed, low token usage
+# Health check on any codebase. No input needed, low token usage
 uv run leeway
 > /code-health start
 ```
@@ -156,7 +109,7 @@ uv run leeway
 
 ## Architecture
 
-Leeway's core agent loop, tool registry, permission system, and hook lifecycle are inspired by **Claude Code's architecture** — a minimal, streaming-first loop where the model drives tool use and the host enforces safety around it. Leeway reimplements that design in Python and extends it with a YAML workflow layer, parallel branches, cron scheduling, and per-node scoping.
+Leeway's core agent loop, tool registry, permission system, and hook lifecycle are inspired by **Claude Code's architecture**: a minimal, streaming-first loop where the model drives tool use and the host enforces safety around it. Leeway reimplements that design in Python and extends it with a YAML workflow layer, parallel branches, cron scheduling, and per-node scoping.
 
 ```mermaid
 flowchart LR
@@ -164,7 +117,7 @@ flowchart LR
     C --> R[RuntimeBundle]
     R --> Q[QueryEngine]
     Q --> A[Anthropic / OpenAI API]
-    A -->|tool_use| T[Tool Registry — 21+ tools]
+    A -->|tool_use| T[Tool Registry, 21+ tools]
     T --> P[Permissions + Hooks]
     P --> X["Files | Shell | Web | MCP | Tasks | Cron"]
     X --> Q
@@ -184,7 +137,7 @@ while True:
         result = await execute_tool(tool_call)
     
     messages.append(tool_results)
-    # Loop continues — model sees results, decides next action
+    # Loop continues. Model sees results, decides next action
 ```
 
 ### Workflow Execution
@@ -216,7 +169,7 @@ Place YAML files in `~/.leeway/workflows/` or `<project>/.leeway/workflows/`. Th
 
 ### Five Patterns
 
-**Linear** — unconditional transition:
+**Linear** (unconditional transition):
 ```yaml
 scan:
   prompt: "Scan the project structure."
@@ -226,7 +179,7 @@ scan:
       when: { always: true }
 ```
 
-**Branch** — signal-based split:
+**Branch** (signal-based split):
 ```yaml
 assess:
   prompt: "Signal 'well_documented', 'needs_investigation', or 'trivial'."
@@ -237,7 +190,7 @@ assess:
       when: { signal: well_documented }
 ```
 
-**Loop** — back-edge to self or earlier node:
+**Loop** (back-edge to self or earlier node):
 ```yaml
 deep_dive:
   prompt: "Read key files. Signal 'dig_deeper' to loop, 'enough' to move on."
@@ -249,13 +202,13 @@ deep_dive:
       when: { signal: enough }
 ```
 
-**Terminal** — no edges, workflow ends:
+**Terminal** (no edges, workflow ends):
 ```yaml
 summarize:
   prompt: "Write a summary with ## Overview, ## Key Files, ## Architecture."
 ```
 
-**Parallel** — condition-based concurrent branches:
+**Parallel** (condition-based concurrent branches):
 ```yaml
 review:
   parallel:
@@ -284,7 +237,7 @@ All matching branches run concurrently. All triggered branches must complete bef
 
 ### Full Example
 
-See [`.leeway/workflows/code-health.yaml`](.leeway/workflows/code-health.yaml) — all five patterns in one workflow with skills, hooks, and approval gates:
+See [`.leeway/workflows/code-health.yaml`](.leeway/workflows/code-health.yaml). It covers all five patterns in one workflow with skills, hooks, and approval gates:
 
 ```python
 # Show avaliable workflows and select one
@@ -318,7 +271,7 @@ Top-level fields in the YAML file:
 | `tools` | `[]` | Tool whitelist (only these tools are available) |
 | `max_turns` | `50` | Max LLM turns within this node |
 | `carry_context` | `true` | Pass prior node's summary as context |
-| `interactive` | `true` | When `true`, the agent can use `ask_user_question` and permission prompts are shown. When `false`, the node runs fully automatically — user prompts are suppressed and parallel approval gates are auto-approved |
+| `interactive` | `true` | When `true`, the agent can use `ask_user_question` and permission prompts are shown. When `false`, the node runs fully automatically. User prompts are suppressed and parallel approval gates are auto-approved |
 | `edges` | `[]` | Outgoing transitions (empty = terminal node) |
 | `skills` | `[]` | Skill names scoped to this node |
 | `hooks` | `[]` | Node-specific hook definitions |
@@ -344,7 +297,7 @@ All conditions support `negate: true` to invert the match.
 |----------|---------|-------------|
 | `target` | required | Name of the destination node |
 | `when` | `always` | Transition condition (see table above) |
-| `priority` | `0` | Evaluation order — higher priority edges are checked first |
+| `priority` | `0` | Evaluation order: higher-priority edges are checked first |
 
 ### Branch Properties
 
@@ -359,7 +312,7 @@ Each branch inside a `parallel` block supports:
 | `skills` | `[]` | Skill names scoped to this branch |
 | `hooks` | `[]` | Branch-scoped hook definitions |
 | `mcp_servers` | `[]` | MCP server names scoped to this branch |
-| `requires_approval` | `false` | Human-in-the-loop gate — ask user before executing |
+| `requires_approval` | `false` | Human-in-the-loop gate: ask user before executing |
 
 The `parallel` block itself also accepts a `timeout` (default `600` seconds) for how long to wait for all triggered branches to complete.
 
@@ -458,20 +411,20 @@ This project includes 3 skills in [`.leeway/skills/`](.leeway/skills/):
 ```markdown
 ---
 name: code-review
-description: Code quality review — identify patterns, anti-patterns, and improvements. Use when performing code reviews, auditing code quality, or evaluating pull requests.
+description: Code quality review: identify patterns, anti-patterns, and improvements. Use when performing code reviews, auditing code quality, or evaluating pull requests.
 ---
 
 # Code Review
 
 ## Workflow
 
-1. Scan structure — use `glob` and `grep` to understand the scope of changes
+1. Scan structure: use `glob` and `grep` to understand the scope of changes
 ...
 
 For the full quality checklist, read [references/checklist.md](references/checklist.md).
 ```
 
-The `description` field is the primary trigger — include both what the skill does and when to use it. Supporting files go in `references/`, `scripts/`, or `assets/` subdirectories.
+The `description` field is the primary trigger: include both what the skill does and when to use it. Supporting files go in `references/`, `scripts/`, or `assets/` subdirectories.
 
 ### Scoping
 
