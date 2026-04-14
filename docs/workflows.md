@@ -125,6 +125,43 @@ All conditions support `negate: true` to invert the match.
 
 **Turn-budget awareness:** For nodes with signal-based edges, the engine automatically tells the LLM how many turns it has and injects an urgent reminder when 2 turns remain. This prevents the LLM from exhausting its turn budget on investigation without signalling a decision.
 
+## Signals
+
+A signal is a string the LLM emits via the `workflow_signal` tool. The engine captures it and uses it to select the next edge whenever a transition is written as `when: { signal: <value> }`. Signals are the primary bridge between LLM judgment and deterministic branching.
+
+### Declaration is per node
+
+There is no global signal registry. The valid signals for a node are exactly the values that appear in that node's own outgoing `signal:` edges:
+
+```yaml
+assess:
+  prompt: "Review the codebase and decide how deep to go."
+  edges:
+    - target: deep_dive
+      when: { signal: needs_investigation }
+    - target: summarize
+      when: { signal: well_documented }
+```
+
+For `assess`, the valid signals are `needs_investigation` and `well_documented`. Any other value is rejected at call time. The same name can mean different things on different nodes, so scoping is per node, not per workflow.
+
+### Runtime behavior
+
+When a node has at least one signal-typed edge, the engine:
+
+1. Injects a **Required Action** section into the node's prompt listing the exact valid decisions.
+2. Scopes the `workflow_signal` tool to that set and rejects any other value with an error that tells the LLM which decisions are valid, so typos and hallucinated names fail fast instead of silently picking the wrong branch.
+3. Captures the first successful call and uses it for edge selection when the node finishes.
+
+Nodes that only use `always`, `output_matches`, or `tool_was_called` edges do not constrain `workflow_signal`, but they also do not read signals, so the LLM has no reason to call the tool.
+
+### Authoring guidance
+
+- **Use meaningful names.** `needs_investigation` beats `branch_a`. The LLM sees these names in the injected prompt and picks by meaning, not position.
+- **Keep the set small per node.** Two to four decisions is typical. A node with eight signal outcomes is usually better modelled as two nodes.
+- **Prefer signals over regex.** If the LLM can just declare intent, `signal:` is more reliable and more readable than `output_matches:`.
+- **Leave room in the turn budget.** See the turn-budget note above. Even though the engine warns at 2 turns remaining, nodes that need to do heavy work before signalling should bump `max_turns` rather than rely on the warning.
+
 ## Edge Properties
 
 | Property | Default | Description |
