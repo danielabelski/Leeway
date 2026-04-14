@@ -40,10 +40,12 @@ Leeway enforces the graph. You write a YAML decision tree; the same nodes run in
 |  | Who drives the flow? | What's in a node? | Best for |
 |---|---|---|---|
 | **AutoGPT, OpenClaw** | LLM | Whatever the LLM decides | Exploratory tasks |
-| **n8n** | Graph | Any kind of node (API call, transform, AI Agent subflow) | SaaS integration (Slack, Stripe, Airtable) |
-| **Leeway** | Graph (decisions) | A full agent loop with local-dev tools | Local dev work (files, shell, codebase) |
+| **n8n** | Graph | Any kind of node (API call, transform, AI Agent subflow) | Connecting SaaS APIs (Slack, Stripe, Airtable) |
+| **Leeway** | Graph (decisions) | A full agent loop with local-dev tools | Personal workflows and custom engineering pipelines that plug into your own system (files, shell, codebase) |
 
-**Pick Leeway when** the task runs on your own files or shell, needs to be repeatable, and needs a model that can reason inside each step.
+n8n is incredible for connecting SaaS APIs. **Leeway is built specifically for personal workflows and custom engineering pipelines that integrate directly into your own system: your files, your shell, your repo, not third-party webhooks.**
+
+> **Pick Leeway when** the task runs on your own files or shell, needs to be repeatable, and needs a model that can reason inside each step.
 
 ---
 
