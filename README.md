@@ -11,8 +11,8 @@
 
 <p align="center">
   <a href="#-quick-start"><img src="https://img.shields.io/badge/Quick_Start-3_min-blue?style=for-the-badge" alt="Quick Start"></a>
-  <a href="docs/workflows.md"><img src="https://img.shields.io/badge/Workflows-YAML-ff69b4?style=for-the-badge" alt="Workflows"></a>
-  <a href="docs/tools.md"><img src="https://img.shields.io/badge/Tools-21+-green?style=for-the-badge" alt="Tools"></a>
+  <a href="guides/workflows.md"><img src="https://img.shields.io/badge/Workflows-YAML-ff69b4?style=for-the-badge" alt="Workflows"></a>
+  <a href="guides/tools.md"><img src="https://img.shields.io/badge/Tools-21+-green?style=for-the-badge" alt="Tools"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"></a>
 </p>
 
@@ -66,7 +66,7 @@ At every branching node, the model picks which path the workflow should take nex
 
 This does not stop the model from confidently picking a *legal but wrong* option. What the graph gives you in that case is bounded damage: the wrong branch still runs inside its own restricted tool set and validated inputs, and the whole path is auditable after the fact.
 
-See [docs/workflows.md](docs/workflows.md#runtime-behavior) for the full mechanics.
+See [guides/workflows.md](guides/workflows.md#runtime-behavior) for the full mechanics.
 
 ---
 
@@ -154,7 +154,7 @@ See [`.leeway/workflows/code-health.yaml`](.leeway/workflows/code-health.yaml). 
   <img src="assets/workflow_process.png" alt="Workflow execution progress" width="1000">
 </p>
 
-See **[docs/workflows.md](docs/workflows.md)** for the full pattern catalog and every property table.
+See **[guides/workflows.md](guides/workflows.md)** for the full pattern catalog and every property table.
 
 ---
 
@@ -162,15 +162,15 @@ See **[docs/workflows.md](docs/workflows.md)** for the full pattern catalog and 
 
 | Topic | Docs |
 |---|---|
-| Writing workflows (patterns, properties, transitions) | [docs/workflows.md](docs/workflows.md) |
-| Built-in tools and custom tool authoring | [docs/tools.md](docs/tools.md) |
-| Skills with progressive disclosure | [docs/skills.md](docs/skills.md) |
-| Hooks (command + HTTP lifecycle callbacks) | [docs/hooks.md](docs/hooks.md) |
-| MCP server integration | [docs/mcp.md](docs/mcp.md) |
-| Plugins (distributable bundles) | [docs/plugins.md](docs/plugins.md) |
-| Scheduling, cron, and remote triggers | [docs/scheduling.md](docs/scheduling.md) |
-| Permission modes and path rules | [docs/permissions.md](docs/permissions.md) |
-| Slash command reference | [docs/commands.md](docs/commands.md) |
+| Writing workflows (patterns, properties, transitions) | [guides/workflows.md](guides/workflows.md) |
+| Built-in tools and custom tool authoring | [guides/tools.md](guides/tools.md) |
+| Skills with progressive disclosure | [guides/skills.md](guides/skills.md) |
+| Hooks (command + HTTP lifecycle callbacks) | [guides/hooks.md](guides/hooks.md) |
+| MCP server integration | [guides/mcp.md](guides/mcp.md) |
+| Plugins (distributable bundles) | [guides/plugins.md](guides/plugins.md) |
+| Scheduling, cron, and remote triggers | [guides/scheduling.md](guides/scheduling.md) |
+| Permission modes and path rules | [guides/permissions.md](guides/permissions.md) |
+| Slash command reference | [guides/commands.md](guides/commands.md) |
 
 ---
 
