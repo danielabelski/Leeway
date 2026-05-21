@@ -34,3 +34,7 @@ htmlcov/
 
 # Distribution
 *.whl
+
+my-video/
+interview/
+leeway_writeup.md
