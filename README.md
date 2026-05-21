@@ -1,5 +1,5 @@
 <p align="center" style="margin-bottom: 0;">
-  <img src="assets/logo.png" alt="Leeway" width="360">
+  <video src="https://github.com/user-attachments/assets/fda824d3-0102-44eb-836b-42d3dd5d062f" autoplay loop muted playsinline width="1000"></video>
 </p>
 
 <h1 align="center" style="margin-top: 0;">Leeway</h1>
@@ -20,10 +20,6 @@
   <img src="https://img.shields.io/badge/python-≥3.10-blue?logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/React+Ink-TUI-61DAFB?logo=react&logoColor=white" alt="React">
   <img src="https://img.shields.io/badge/output-text_|_json_|_stream--json-blueviolet" alt="Output">
-</p>
-
-<p align="center">
-  <video src="https://github.com/user-attachments/assets/fda824d3-0102-44eb-836b-42d3dd5d062f" autoplay loop muted playsinline width="1000"></video>
 </p>
 
 ---
